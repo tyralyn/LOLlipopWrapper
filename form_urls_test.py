@@ -18,7 +18,7 @@ import requests
 import requests_cache
 import json
 
-freestylinrough = 28328081
+freestylinroughId = 28328081
 NAPlatform=form_urls.platform_ids[form_urls.DEFAULT_REGION]
 NARegion = form_urls.region_ids[form_urls.DEFAULT_REGION]
 

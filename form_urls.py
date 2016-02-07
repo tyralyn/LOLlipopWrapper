@@ -35,33 +35,140 @@ platform_ids = {'BRAZIL' : 'BR1',
 'PUBLIC_BETA_ENVIRONMENT' : 'PBE',
 'GLOBAL' : ''}
 
-freestylinrough = 28328081
 champDatabase = {}
 
-#requestContents
-def getAllChampsSuffix(regionId):
+#######################
+#  champion suffixes  #
+#######################
+def allChampionsSuffix(regionId):
 	return "/api/lol/"+regionId+"/v1.2/champion?"
 
-def getChampSuffix(regionId, championId):
+def championSuffix(regionId, championId):
 	return  "/api/lol/"+regionId+"/v1.2/champion/"+str(championId)+"?"
 
-def getChampMastery(platformId, summonerId, championId):
+######################
+#  mastery suffixes  #
+######################
+def championMasterySuffix(platformId, summonerId, championId):
         return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/champion/"+str(championId)+"?"
 
-def getAllChampMasteries(platformId, summonerId, championId):
+def allChampionMasteriesSuffix(platformId, summonerId, championId):
         return "/championmastery/location"+platformId+"/player/"+str(summonerId)+"/champions?"
 
-def getChampMasteryScore(platformId, summonerId):
+def championMasteryScoreSuffix(platformId, summonerId):
         return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/score?"
 
-def getTopNChampMasteries(platformId, summonerId, n):
+def topNChampionMasteriesSuffix(platformId, summonerId, n):
         return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/topchampions"+"?count="+str(n)+"&"
 
-def getCurrentGame(platformId, summonerId):
+###########################
+#  current game suffixes  #
+###########################
+def currentGameInfoSuffix(platformId, summonerId):
         return "/observer-mode/rest/consumer/getSpectatorGameInfo/"+platformId+"/"+summonerId+"?"
 
-def getFeaturedGames():
+#############################
+#  featured games suffixes  #
+#############################
+def featuredGamesListSuffix():
         return "/observer-mode/rest/featured?"
 
+###########################
+#  recent games suffixes  #
+###########################
+def recentGamesSuffix(regionId, summonerId):
+        return "/api/lol/"+regionId+"/v1.3/game/by-summoner/"+str(summonerId)+"/recent?"
+
+######################
+#  leagues suffixes  #
+######################
+#def leaguesBySummonerSuffix(regionId, summonerId)
+
+#def leagueEntriesBySummonerSuffix(regionId, SummonerIds)
+
+#def leaguesByTeamSuffix(regionId, teamIds)
+
+#def leagueEntriesByTeamSuffix(regionId, teamIds)
+
+#def challengerTierLeaguesSuffix(regionId)
+
+#def masterTierLeaguesSuffix(regionId)
+
+####################
+#  match suffixes  #
+####################
+#def matchSuffix(regionId, matchId, includeTimeline)
+
+########################
+#  matchlist suffixes  #
+########################
+#def matchListSuffix(regionId, summonerId, championIds, rankedQueues, seasons, beginTime, endTime, beginIndex, endIndex)
+
+##########@@#################
+#  summoner stats suffixes  #
+###########@@################
+#def rankedStatsSuffix(regionId, summonerId, season)
+
+#def playerStatsSuffix(regionId, summonerId, season)
+
+
+##########################
+#  static data suffixes  #
+##########################
+#def championsListSuffix(regionId, locale, version dataById, champData)
+
+#def championSuffix(regionId, championId, locale, version, champData)
+
+#def itemsListSuffix(regionId, locale, version, itemListData)
+
+#def itemSuffix(regionId, itemId, locale, version, itemData)
+
+#def languageStringsDataSuffix(regionId, locale, version)
+
+#def supportedLanguagesDataSuffix(regionId)
+
+#def mapDataSuffix(regionId, locale, version)
+
+#def masteryListSuffix(regionId, locale, version, masteryListData)
+
+#def masterySuffix(region, masteryId, locale, version, masteryData)
+
+#def realmSuffix(regionId)
+
+#def runesListSuffix(regionId, locale, version, runeListData)
+
+#def runeSuffix(regionId, runeId, locale, version, runeData)
+
+#def summonerSpellListSuffix(regionId, locale, version, spellListData)
+
+#def summonerSpellSuffix(regionId, spellId, locale, version, spellData)
+
+#def versionDataSuffix(regionId)
+
+#######################
+#  summoner suffixes  #
+#######################
+#def summonersByAccountIdsSuffix(regionId, accountIds)
+
+#def summonersByNamesSuffix(regionId, summonerNames)
+
+#def summonersBySummonerIdsSuffix(regionId, summonerIds)
+
+#def masteryPagesBySummonerIdsSuffix(regionId, summonerIds)
+
+#def summonerNamesBySummonerIdsSuffix(regionId, summonerIds)
+
+#def runePagesBySummonerIdsSuffix(regionId, summonerIds)
+
+###################
+#  team suffixes  #
+###################
+#def teamsBySummonerIdsSuffix(regionId, summonerIds)
+
+#def teamsByTeamIdsSuffix(regionId, teamIds)
+
+##########################################
+#  get the request URL given the suffix  #
+##########################################
 def getRequestURL(suffix):
 	return (requestPrefix+suffix+requestGlue+get_api_key.getAPIKey())
