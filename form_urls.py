@@ -82,9 +82,15 @@ def recentGamesSuffix(regionId, summonerId):
 ######################
 #  leagues suffixes  #
 ######################
-#def leaguesBySummonerSuffix(regionId, summonerId)
+def leaguesBySummonerSuffix(regionId, *summonerIds):
+        s= "/api/lol/"+regionId+"/v2.5/league/by-summoner/"
+        for summonerId in summonerIds:
+                s=s+str(summonerId)+","
+        s = s + "?"
+        return s
 
-#def leagueEntriesBySummonerSuffix(regionId, SummonerIds)
+def leagueEntriesBySummonerSuffix(regionId, *summonerIds):
+        s=leaguesBySummonerSuffix(regionId, summonerIds)+
 
 #def leaguesByTeamSuffix(regionId, teamIds)
 

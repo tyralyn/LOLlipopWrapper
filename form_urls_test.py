@@ -19,6 +19,11 @@ import requests_cache
 import json
 
 freestylinroughId = 28328081
+gammajokerId=29719769
+spiritualcreedId=45315427
+xxlobsterxxcrabxId=20022996
+westriceId= 19674238
+bates550Id=22453757
 NAPlatform=form_urls.platform_ids[form_urls.DEFAULT_REGION]
 NARegion = form_urls.region_ids[form_urls.DEFAULT_REGION]
 

@@ -11,7 +11,7 @@ requests_cache.install_cache(cache_name='lol_test_cache', backend='sqlite', expi
 def testCache():
     for i in range (0,10):
         now = time.ctime(int(time.time()))
-        r=requests.get(form_urls.getRequestURL(form_urls.getAllChampsSuffix()),auth=('user', 'pass'))
+        r=requests.get(form_urls.getRequestURL(form_urls.allChampsSuffix()),auth=('user', 'pass'))
         #j=json.loads(r.text)
         print ("Time: {0} / Used Cache: {1}".format(now, r.from_cache))
 
@@ -19,7 +19,7 @@ def testCache():
 #makes a getAllChamps request and stores all champIds in a dictionary, which is returned.     
 def initChampDatabase():
     d = {}
-    r=requests.get(form_urls.getRequestURL(form_urls.getAllChampsSuffix()),auth=('user', 'pass'))
+    r=requests.get(form_urls.getRequestURL(form_urls.allChampsSuffix()),auth=('user', 'pass'))
     allChampsJ=json.loads(r.text)
     for i in range(0, len(allChampsJ["champions"])):
         d[allChampsJ["champions"][i]["id"]]=[]
