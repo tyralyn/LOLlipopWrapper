@@ -140,10 +140,38 @@ def matchListSuffix(regionId, summonerId, championIds=[], rankedQueues=[], seaso
 #############################
 #  summoner stats suffixes  #
 #############################
-#def rankedStatsSuffix(regionId, summonerId, season)
+def rankedStatsSuffix(regionId, summonerId, season=""):
+        seasonString = "" if season == "" else ("season="+season+"&")
+        return "/api/lol/"+regionId+"/v1.3/stats/by-summoner/"+str(summonerId)+"/ranked?"+seasonString
         
-#def playerStatsSuffix(regionId, summonerId, season)
+def playerStatsSuffix(regionId, summonerId, season=""):
+        seasonString = "" if season == "" else ("season="+season+"&")
+        return "/api/lol/"+regionId+"/v1.3/stats/by-summoner/"+str(summonerId)+"/summary?"+seasonString
 
+#######################
+#  summoner suffixes  #
+#######################
+#def summonersByAccountIdsSuffix(regionId, accountIds):
+
+def summonersByNamesSuffix(regionId, summonerNames):
+        summonerNamesList=','.join(summonerNames)
+        return "/api/lol/"+regionId+"/v1.4/summoner/by-name/"+summonerNamesList+"?"
+
+def summonersBySummonerIdsSuffix(regionId, summonerIds):
+        summonerIdsList=','.join(map(str,summonerIds))
+        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"?"
+
+def masteryPagesBySummonerIdsSuffix(regionId, summonerIds):
+        summonerIdsList=','.join(map(str,summonerIds))
+        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/masteries?"
+
+def summonerNamesBySummonerIdsSuffix(regionId, summonerIds):
+        summonerIdsList=','.join(map(str,summonerIds))
+        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/name?"
+
+def runePagesBySummonerIdsSuffix(regionId, summonerIds):
+        summonerIdsList=','.join(map(str,summonerIds))
+        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/runes?"
 
 ##########################
 #  static data suffixes  #
@@ -178,27 +206,17 @@ def matchListSuffix(regionId, summonerId, championIds=[], rankedQueues=[], seaso
 
 #def versionDataSuffix(regionId)
 
-#######################
-#  summoner suffixes  #
-#######################
-#def summonersByAccountIdsSuffix(regionId, accountIds)
-
-#def summonersByNamesSuffix(regionId, summonerNames)
-
-#def summonersBySummonerIdsSuffix(regionId, summonerIds)
-
-#def masteryPagesBySummonerIdsSuffix(regionId, summonerIds)
-
-#def summonerNamesBySummonerIdsSuffix(regionId, summonerIds)
-
-#def runePagesBySummonerIdsSuffix(regionId, summonerIds)
 
 ###################
 #  team suffixes  #
 ###################
-#def teamsBySummonerIdsSuffix(regionId, summonerIds)
+def teamsBySummonerIdsSuffix(regionId, summonerIds):
+        summonerIdsList=','.join(map(str,summonerIds))
+        return "/api/lol/"+regionId+"/v2.4/team/by-summoner/"+summonerIdsList+"?"
 
-#def teamsByTeamIdsSuffix(regionId, teamIds)
+def teamsByTeamIdsSuffix(regionId, teamIds):
+        teamIdsList=','.join(map(str,teamIds))
+        return "/api/lol/"+regionId+"/v2.4/team/"+teamIdsList+"?"
 
 ##########################################
 #  get the request URL given the suffix  #

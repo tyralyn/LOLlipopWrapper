@@ -18,13 +18,13 @@ import requests
 import requests_cache
 import json
 
-freestylinroughId = 28328081
-gammajokerId=29719769
-spiritualcreedId=45315427
-xxlobsterxxcrabxId=20022996
-westriceId= 19674238
-bates550Id=22453757
-summonerIdList=[freestylinroughId, gammajokerId, spiritualcreedId, xxlobsterxxcrabxId, westriceId, bates550Id]
+freestylinrough = 28328081
+gammajoker=29719769
+spiritualcreed=45315427
+xxlobsterxxcrabx=20022996
+westrice= 19674238
+bates550=22453757
+summonerIdList=[freestylinrough, gammajoker, spiritualcreed, xxlobsterxxcrabx, westrice, bates550]
 
 
 bates550Match1=2091919922

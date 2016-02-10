@@ -1,3 +1,7 @@
+LOLlipopWrapper is a fairly heavyweight wrapper for the public League of Legends API.
+    * easy-to-use request mechanism
+    * learning/tutorial-type error handling: incorrect calls will be explained, etc. 
+
 Libraries/modules currently used in LOLlipopWrapper:
     * requests (http://docs.python-requests.org/en/master/)
     * requests-cache (https://pypi.python.org/pypi/requests-cache)
@@ -52,3 +56,5 @@ TODO/other notes:
     * individual testing/print output messages for each API request?
     * create API request class? probably not necessary
     * level of depth for objects (summoner, runes, masteries, champions, etc)
+    * list checking (length) for maximum number of objects that can be passed
+    * patchable: versions in API call should be able to be updated with ease
