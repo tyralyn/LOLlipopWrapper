@@ -1,4 +1,6 @@
 import get_api_key
+import time
+import datetime
 
 #strings holding api parts
 #api in form of requestPrefix + requestContent+ requestGlue + the actual API key
@@ -36,6 +38,9 @@ platform_ids = {'BRAZIL' : 'BR1',
 'GLOBAL' : ''}
 
 champDatabase = {}
+
+def dateAndTimeToEpochMilliseconds(year, month, day, hour=0, minute=0, second=0, millisecond=0):
+        return (1000*time.mktime(datetime.datetime(year, month, day, hour, minute, second, millisecond).timetuple()))
 
 #######################
 #  champion suffixes  #
@@ -82,39 +87,61 @@ def recentGamesSuffix(regionId, summonerId):
 ######################
 #  leagues suffixes  #
 ######################
-def leaguesBySummonerSuffix(regionId, *summonerIds):
+def leaguesBySummonerSuffix(regionId, summonerIds):
         s= "/api/lol/"+regionId+"/v2.5/league/by-summoner/"
-        for summonerId in summonerIds:
-                s=s+str(summonerId)+","
-        s = s + "?"
+        summonerList=','.join(map(str,summonerIds))
+        s = s + summonerList + "?"
         return s
 
-def leagueEntriesBySummonerSuffix(regionId, *summonerIds):
-        s=leaguesBySummonerSuffix(regionId, summonerIds)+
+def leagueEntriesBySummonerSuffix(regionId, summonerIds):
+        s=leaguesBySummonerSuffix(regionId, summonerIds)
+        s=s[:-1]+"/entry?"
+        return s
+        
 
 #def leaguesByTeamSuffix(regionId, teamIds)
 
 #def leagueEntriesByTeamSuffix(regionId, teamIds)
 
-#def challengerTierLeaguesSuffix(regionId)
+def challengerTierLeaguesSuffix(regionId):
+        return "/api/lol/"+regionId+"/v2.5/league/challenger"
 
-#def masterTierLeaguesSuffix(regionId)
+def masterTierLeaguesSuffix(regionId):
+        return "/api/lol/"+regionId+"/v2.5/league/master"
 
 ####################
 #  match suffixes  #
 ####################
-#def matchSuffix(regionId, matchId, includeTimeline)
+def matchSuffix(regionId, matchId, includeTimeline=False):
+        return "/api/lol/"+regionId+"/v2.2/match/"+str(matchId)+"?includeTimeline="+str(includeTimeline)+"&"        
 
 ########################
 #  matchlist suffixes  #
 ########################
-#def matchListSuffix(regionId, summonerId, championIds, rankedQueues, seasons, beginTime, endTime, beginIndex, endIndex)
+def matchListSuffix(regionId, summonerId, championIds=[], rankedQueues=[], seasons=[], beginTime=-1, endTime=-1, beginIndex=-1, endIndex=-1):
+        optionalParameters = []
+        if (len(championIds)>0):
+                optionalParameters.append("championIds="+','.join(map(str,championIds)))
+        if (len(rankedQueues)>0):
+                optionalParameters.append("rankedQueues="+','.join(rankedQueues))
+        if (len(seasons)>0):
+                optionalParameters.append("seasons="+','.join(seasons))
+        if (beginTime>0):
+                optionalParameters.append("&beginTime="+str(int(beginTime)))
+        if (endTime>0):
+                optionalParameters.append("endTime="+str(int(endTime)))
+        if (beginIndex>0):
+                optionalParameters.append("beginIndex="+str(beginIndex))
+        if (endIndex>0):
+                optionalParameters.append("endIndex="+str(endIndex))
+        s="/api/lol/"+regionId+"/v2.2/matchlist/by-summoner/"+str(summonerId)+"?"+('&'.join(optionalParameters))+'&'
+        return s
 
-##########@@#################
+#############################
 #  summoner stats suffixes  #
-###########@@################
+#############################
 #def rankedStatsSuffix(regionId, summonerId, season)
-
+        
 #def playerStatsSuffix(regionId, summonerId, season)
 
 

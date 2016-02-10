@@ -24,8 +24,19 @@ spiritualcreedId=45315427
 xxlobsterxxcrabxId=20022996
 westriceId= 19674238
 bates550Id=22453757
+summonerIdList=[freestylinroughId, gammajokerId, spiritualcreedId, xxlobsterxxcrabxId, westriceId, bates550Id]
+
+
+bates550Match1=2091919922
+bates550Match2=2091856984
+bates550Match3=2091697670
+positiveteamenvironmentId="TEAM-3ed957d0-3f21-11e5-bc58-c81f66dcfb5a"
+
 NAPlatform=form_urls.platform_ids[form_urls.DEFAULT_REGION]
 NARegion = form_urls.region_ids[form_urls.DEFAULT_REGION]
+
+def testSuffix(suffix):
+    return (testURL(form_urls.getRequestURL(suffix)))
 
 def testURL(URL):
     try:

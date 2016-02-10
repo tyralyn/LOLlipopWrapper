@@ -35,12 +35,18 @@ Organizational notes:
             * will this text-file thing update itself each time the requestMaker class is used?
                 * date stored to record when the text file was last checked?
                 * static data versions -- look into this
-        
+    ambiguous function parameters: functions that can accept one argument or a list
+        * will accept lists only, as per the pythonic way of explicit over implicit
+        * if only one item is being passed, rather than a list, then the item must be put in a list and passed that way
+    leaguesBySummonerSuffix: doesnt work, results in error... get teamIDs from getTeam API call
 
+
+DONE:
+    * fill in optional values for API requests that have them
 
 TODO/other notes:
     * implement requestMaker and requests-cache for entire thing
-    * fill in optional values for API requests that have them
+    * default region setup? 
     * figure out how to handle errors gracefully
     * parse/interpret status messages for incorrect API calls?
     * individual testing/print output messages for each API request?
