@@ -37,6 +37,20 @@ platform_ids = {'BRAZIL' : 'BR1',
 'PUBLIC_BETA_ENVIRONMENT' : 'PBE',
 'GLOBAL' : ''}
 
+versions={ 'CHAMPION': 'v1.2',
+'CHAMPION_MASTERY': '',
+'CURRENT_GAME': 'v1.0',
+'FEATURED_GAME': 'v1.0',
+'GAME': 'v1.3',
+'LEAGUE': 'v2.5',
+'LOL_STATIC_DATA': 'v1.2',
+'LOL_STATUS': 'v1.0',
+'MATCH': 'v2.2',
+'MATCH_LIST': 'v2.2',
+'STATS': 'v1.3',
+'SUMMONER': 'v1.4',
+'TEAM': 'v2.4'}
+
 champDatabase = {}
 
 def dateAndTimeToEpochMilliseconds(year, month, day, hour=0, minute=0, second=0, millisecond=0):

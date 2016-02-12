@@ -30,7 +30,7 @@ summonerIdList=[freestylinrough, gammajoker, spiritualcreed, xxlobsterxxcrabx, w
 bates550Match1=2091919922
 bates550Match2=2091856984
 bates550Match3=2091697670
-positiveteamenvironmentId="TEAM-3ed957d0-3f21-11e5-bc58-c81f66dcfb5a"
+positiveteamenvironment="TEAM-3ed957d0-3f21-11e5-bc58-c81f66dcfb5a"
 
 NAPlatform=form_urls.platform_ids[form_urls.DEFAULT_REGION]
 NARegion = form_urls.region_ids[form_urls.DEFAULT_REGION]
