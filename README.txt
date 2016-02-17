@@ -1,3 +1,5 @@
+CURERNT GOAL: MO MORE HARDCODED STRINGS!
+
 LOLlipopWrapper is a fairly heavyweight wrapper for the public League of Legends API.
     * easy-to-use request mechanism
     * learning/tutorial-type error handling: incorrect calls will be explained, etc. 
@@ -58,3 +60,9 @@ TODO/other notes:
     * level of depth for objects (summoner, runes, masteries, champions, etc)
     * list checking (length) for maximum number of objects that can be passed
     * patchable: versions in API call should be able to be updated with ease
+    * tournament provider api requests
+
+
+structure notes
+    * four kinds of requests: api/lol, championmastery, observer-mode, tournament/public
+    * api/lol requests can be regional or static
