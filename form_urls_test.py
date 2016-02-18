@@ -35,8 +35,10 @@ positiveteamenvironment="TEAM-3ed957d0-3f21-11e5-bc58-c81f66dcfb5a"
 NAPlatform=form_urls.platform_ids[form_urls.DEFAULT_REGION]
 NARegion = form_urls.region_ids[form_urls.DEFAULT_REGION]
 
-def testSuffix(suffix):
-    return (testURL(form_urls.getRequestURL(suffix)))
+b1=form_urls.baseReqURL()
+b2=form_urls.basicAPIReq('LEAGUE')
+b3=form_urls.championReq().allChampions()
+b4=(form_urls.championReq()).champion(1)
 
 def testURL(URL):
     try:
