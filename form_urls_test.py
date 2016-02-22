@@ -16,19 +16,22 @@
 import form_urls
 import requests
 import requests_cache
+import test_values
 import json
 
 def mainTest():
-    b1=form_urls.baseReqURL()
-    b2=form_urls.basicAPIReq()
-    b3a=form_urls.championReq().allChampions()
-    b3b=form_urls.championReq().champion(1)
-    b4a=form_urls.leagueReq().leaguesBySummoner(test_values.NARegion, test_values.bates550)
-    b4b=form_urls.leagueReq().leagueEntriesBySummoner(test_values.NARegion, test_values.bates550)
-    b4c=form_urls.leagueReq().challengerLeagues()
-    b4d=form_urls.leagueReq().masterLeagues()
-    b5=form_urls.matchReq().matches(test_values.NARegion, test_values.bates550Match1, True)
-
+    t = []
+    t.append(form_urls.baseReqURL())
+    t.append(form_urls.basicAPIReq('LEAGUE'))
+    t.append(form_urls.championReq().allChampions())
+    t.append(form_urls.championReq().champion(1))
+    t.append(form_urls.leagueReq().leaguesBySummoner(test_values.NARegion, [test_values.bates550, test_values.gammajoker]))
+    t.append(form_urls.leagueReq().leagueEntriesBySummoner(test_values.NARegion, [test_values.bates550, test_values.gammajoker]))
+    t.append(form_urls.leagueReq().challengerLeagues())
+    t.append(form_urls.leagueReq().masterLeagues())
+    t.append(form_urls.matchReq().matches(test_values.NARegion, test_values.bates550Match1, True))
+    for testRequest in t:
+        testOutput(testRequest)
 
 
 def testOutput(reqObj):

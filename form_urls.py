@@ -8,8 +8,6 @@ import datetime
 requestPrefix="https://na.api.pvp.net/"
 domainName="https://na.api.pvp.net/"
 
-
-lolAPIPathPrefix="/api/lol"
 championMasteryPathPrefix="/championmastery/location"
 publicTournamentPathPrefix="/tournament/public"
 shardsPathPrefix="/shards"
@@ -74,6 +72,12 @@ basic_request_types={ 'CHAMPION': 'champion',
 
 path_parts ={ 'API':'api',
 'LOL':'lol',
+'BY_SUMMONER': 'by-summoner',
+'BY_TEAM': 'by-team',
+'BY_TOURNAMENT':'by-tournament',
+'BY_ACCOUNT': 'by-account',
+'BY_NAME':'by-name',
+'BY_CODE':'by-code',
 'CHAMPION': 'champion',
 'CHAMPIONS':'champions',
 'PLAYER': 'player',
@@ -97,13 +101,13 @@ path_parts ={ 'API':'api',
 'SUMMARY':'summary'}
 
 param_parts = { 'API_KEY': 'api_key',
-'BY_SUMMONER': 'by-summoner',
-'BY_TEAM': 'by-team',
-'BY_TOURNAMENT':'by-tournament',
-'BY_ACCOUNT': 'by-account',
-'BY_NAME':'by-name',
-'BY_CODE':'by-code',
-'INCLUDE_TIMELINE' : 'includeTimeline'
+'INCLUDE_TIMELINE' : 'includeTimeline',
+'TYPE': 'type'
+}
+
+league_param_options= {'RANKED_5_SOLO': 'RANKED_SOLO_5x5',
+'RANKED_3_TEAM':'RANKED_TEAM_3x3',
+'RANKED_5_TEAM':'RANKED_TEAM_5x5'
 }
 
 champDatabase = {}
@@ -114,7 +118,7 @@ def dateAndTimeToEpochMilliseconds(year, month, day, hour=0, minute=0, second=0,
 
 class baseReqURL:
         apiKey =  get_api_key.getAPIKey(get_api_key.filePath)
-        requestType='BASE'
+        requestType='BASE' #not an actual request type that can be submitted, for printing purposes
         def __init__(self):
                 self.path = []
                 self.params = {'API_KEY': self.apiKey}
@@ -132,22 +136,25 @@ class baseReqURL:
         def constructReqURL(self):
                 return domainName + self.pathString()+"?"+self.valueString()
 
+        #testing method to examine baseReqURL: prints out path, params, and the constructed request URL
         def printReqURL(self):
                 print ("path: ", self.path)
                 print ("params: ", self.params)
                 print (self.constructReqURL())
 
 
-
+#child of baseReqURL for requests of the type /api/lol (most commonly used)
 class basicAPIReq(baseReqURL):
-        pathPrefix=lolAPIPathPrefix
+        #region ID: added here because non /api/lol requests do not utilize a region
         regionId=region_ids[DEFAULT_REGION]
-        requestType='BASIC'
+        requestType='BASIC' #not an actual request type that can be submitted, for printing purposes
         def __init__(self, requestType): 
                 baseReqURL.__init__(self)
+                #appending path variables for /api/lol requests
                 self.path.append(path_parts['API'])
                 self.path.append(path_parts['LOL'])
                 self.path.append(self.regionId)
+                #put in the requestType path values (version and type) passed in by child class
                 self.requestType=requestType
                 self.path.append(versions[self.requestType])
                 self.path.append(basic_request_types[self.requestType])
@@ -181,23 +188,26 @@ class recentGamesReq(basicAPIReq):
 class leagueReq(basicAPIReq):
         def __init__(self):
                 basicAPIReq.__init__(self, 'LEAGUE')
-        def leaguesBySummoner(regionId, summonerIds):
-                self.path = self.path + summonerIds
+        def leaguesBySummoner(self, regionId, summonerIds):
+                self.path.append(path_parts['BY_SUMMONER'])
+                self.path.append(','.join(map(str,summonerIds)))
                 return self
 
-        def leagueEntriesBySummoner(regionId, summonerIds):
-                self.path = self.path + summonerIds
+        def leagueEntriesBySummoner(self, regionId, summonerIds):
+                self.leaguesBySummoner(regionId, summonerIds)
                 self.path.append(path_parts['ENTRIES'])
                 return self
 
         #def leaguesByTeamSuffix(regionId, teamIds)
         #def leagueEntriesByTeamSuffix(regionId, teamIds)
-        def challengerLeagues():
+        def challengerLeagues(self, leagueType='RANKED_5_SOLO'):
                 self.path.append(path_parts['CHALLENGER'])
+                self.params['TYPE']=league_param_options[leagueType]
                 return self
 
-        def masterLeagues():
+        def masterLeagues(self, leagueType='RANKED_5_SOLO'):
                 self.path.append(path_parts['MASTER'])
+                self.params['TYPE']=league_param_options[leagueType]
                 return self
 
 ####################
@@ -207,8 +217,7 @@ class leagueReq(basicAPIReq):
 class matchReq(basicAPIReq):
         def __init__(self):
                 basicAPIReq.__init__(self, 'MATCH')
-        def matches(regionId, matchId, includeTimeline=False):
-                self.path.append(regionId)
+        def matches(self, regionId, matchId, includeTimeline=False):
                 self.path.append(matchId)
                 self.params['INCLUDE_TIMELINE']=includeTimeline
                 return self

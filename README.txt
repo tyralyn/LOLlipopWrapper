@@ -32,6 +32,8 @@ Current descriptions of files:
         * contains function to initialize champion database with allChampsSuffix method
         * database = dictionary of championId to empty list
         * contains function to tet out requestsCache
+    test_values.py: 
+        *contains variables for testing (e.g. some summoner names and summoner matches, teams, regions, etc)
 
 Organizational notes:
     requestMaker class: will make the actual HTTP request to the API
@@ -51,7 +53,9 @@ DONE:
     * fill in optional values for API requests that have them
 
 TODO/other notes:
+    * RESTRUCTURE REQUESTS TO REDUCE HARDCODING -- in progress
     * implement requestMaker and requests-cache for entire thing
+    * implement requests-q
     * default region setup? 
     * figure out how to handle errors gracefully
     * parse/interpret status messages for incorrect API calls?
@@ -66,8 +70,9 @@ TODO/other notes:
 structure notes
     * four kinds of requests: api/lol, championmastery, observer-mode, tournament/public
     * api/lol requests can be regional or static: static data requests are in a diff. format
-    * by default, all requests have one value in the value section: the apiKey. construct default?
+    * by default, all requests have one param in the params section: the apiKey. construct default?
     * idea: one request former/builder that builds individual requests?
+    * different caches for different kinds of requests
 
 basic api (non champ mastery, non observer-mode, non tournament)
     * suffix format is in the form of /api/lol/ + static (if static) + region + version + request category + further modifiers
