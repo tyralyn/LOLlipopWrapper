@@ -71,3 +71,5 @@ structure notes
 
 basic api (non champ mastery, non observer-mode, non tournament)
     * suffix format is in the form of /api/lol/ + static (if static) + region + version + request category + further modifiers
+    * REQUESTS_Q with cache, spaces out requests
+    * "refreshable" objects: objects saved (e.g. player, player's masteries) and to refresh, make a refresh call and request will be added to stack

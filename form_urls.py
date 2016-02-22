@@ -62,7 +62,7 @@ basic_request_types={ 'CHAMPION': 'champion',
 'CHAMPION_MASTERY': '',
 'CURRENT_GAME': '',
 'FEATURED_GAME': '',
-'GAME': 'game',
+'RECENT_GAMES': 'game',
 'LEAGUE': 'league',
 'LOL_STATIC_DATA': 'static-data',
 'LOL_STATUS': 'status',
@@ -79,7 +79,7 @@ path_parts ={ 'API':'api',
 'PLAYER': 'player',
 'SCORE': 'score',
 'TOP_CHAMPIONS': 'topchampions',
-'ENTRY': 'entry',
+'ENTRIES': 'entry',
 'CHALLENGER':'challenger',
 'MASTER':'master',
 'ITEM':'item',
@@ -96,13 +96,14 @@ path_parts ={ 'API':'api',
 'RANKED':'ranked',
 'SUMMARY':'summary'}
 
-params = { 'API_KEY': 'api_key',
-"BY_SUMMONER": 'by-summoner',
-"BY_TEAM": 'by-team',
-"BY_TOURNAMENT":'by-tournament',
-"BY_ACCOUNT": 'by-account',
-"BY_NAME":'by-name',
-"BY_CODE":'by-code',
+param_parts = { 'API_KEY': 'api_key',
+'BY_SUMMONER': 'by-summoner',
+'BY_TEAM': 'by-team',
+'BY_TOURNAMENT':'by-tournament',
+'BY_ACCOUNT': 'by-account',
+'BY_NAME':'by-name',
+'BY_CODE':'by-code',
+'INCLUDE_TIMELINE' : 'includeTimeline'
 }
 
 champDatabase = {}
@@ -113,9 +114,10 @@ def dateAndTimeToEpochMilliseconds(year, month, day, hour=0, minute=0, second=0,
 
 class baseReqURL:
         apiKey =  get_api_key.getAPIKey(get_api_key.filePath)
+        requestType='BASE'
         def __init__(self):
                 self.path = []
-                self.params = {params['API_KEY']: self.apiKey}
+                self.params = {'API_KEY': self.apiKey}
 
         #returns list of path items as a string joined by '/' for URL construction
         def pathString(self): 
@@ -123,14 +125,14 @@ class baseReqURL:
 
         #returns dictionary of values as joined for URL
         def valueString(self):
-                l = [ str(k)+"="+str(v) for k, v in self.params.items()]
+                l = [ str(param_parts[k])+"="+str(v) for k, v in self.params.items()]
                 return '&'.join(l)
 
         #construct entire URL given path and values, for all requests
         def constructReqURL(self):
                 return domainName + self.pathString()+"?"+self.valueString()
 
-        def printBaseReqURL(self):
+        def printReqURL(self):
                 print ("path: ", self.path)
                 print ("params: ", self.params)
                 print (self.constructReqURL())
@@ -140,7 +142,7 @@ class baseReqURL:
 class basicAPIReq(baseReqURL):
         pathPrefix=lolAPIPathPrefix
         regionId=region_ids[DEFAULT_REGION]
-        requestType=''
+        requestType='BASIC'
         def __init__(self, requestType): 
                 baseReqURL.__init__(self)
                 self.path.append(path_parts['API'])
@@ -152,195 +154,61 @@ class basicAPIReq(baseReqURL):
         def setRegion(region):
                 DEFAULT_REGION=region
 
+#######################
+#  champion suffixes  #
+#######################
 class championReq(basicAPIReq):
         def __init__(self):
                 basicAPIReq.__init__(self, 'CHAMPION')
         def allChampions(self):
-                return True
+                return self
         def champion(self, championId):
                 self.path.append(str(championId))
-
-
-"""
-#######################
-#  champion suffixes  #
-#######################
-def allChampions(regionId):
-	return "/api/lol/"+regionId+"/"+versions['CHAMPION']+"/champion?"
-
-def champion(regionId, championId):
-	return  "/api/lol/"+regionId+"/"+versions['CHAMPION']+"/champion/"+str(championId)+"?"
-
-######################
-#  mastery suffixes  #
-######################
-def championMastery(platformId, summonerId, championId):
-        return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/champion/"+str(championId)+"?"
-
-def allChampionMasteries(platformId, summonerId, championId):
-        return "/championmastery/location"+platformId+"/player/"+str(summonerId)+"/champions?"
-
-def championMasteryScore(platformId, summonerId):
-        return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/score?"
-
-def topNChampionMasteries(platformId, summonerId, n):
-        return "/championmastery/location/"+platformId+"/player/"+str(summonerId)+"/topchampions"+"?count="+str(n)+"&"
-
-###########################
-#  current game suffixes  #
-###########################
-def currentGameInfo(platformId, summonerId):
-        return "/observer-mode/rest/consumer/getSpectatorGameInfo/"+platformId+"/"+summonerId+"?"
-
-#############################
-#  featured games suffixes  #
-#############################
-def featuredGamesList():
-        return "/observer-mode/rest/featured?"
+                return self
 
 ###########################
 #  recent games suffixes  #
 ###########################
-def recentGames(regionId, summonerId):
-        return "/api/lol/"+regionId+"/v1.3/game/by-summoner/"+str(summonerId)+"/recent?"
+class recentGamesReq(basicAPIReq):
+        def __init__(self):
+                basicAPIReq.__init__(self, 'RECENT_GAMES')
+        def recentGames(self):
+                return self
 
 ######################
 #  leagues suffixes  #
 ######################
-def leaguesBySummoner(regionId, summonerIds):
-        s= "/api/lol/"+regionId+"/v2.5/league/by-summoner/"
-        summonerList=','.join(map(str,summonerIds))
-        s = s + summonerList + "?"
-        return s
+class leagueReq(basicAPIReq):
+        def __init__(self):
+                basicAPIReq.__init__(self, 'LEAGUE')
+        def leaguesBySummoner(regionId, summonerIds):
+                self.path = self.path + summonerIds
+                return self
 
-def leagueEntriesBySummoner(regionId, summonerIds):
-        s=leaguesBySummonerSuffix(regionId, summonerIds)
-        s=s[:-1]+"/entry?"
-        return s
-        
+        def leagueEntriesBySummoner(regionId, summonerIds):
+                self.path = self.path + summonerIds
+                self.path.append(path_parts['ENTRIES'])
+                return self
 
-#def leaguesByTeamSuffix(regionId, teamIds)
+        #def leaguesByTeamSuffix(regionId, teamIds)
+        #def leagueEntriesByTeamSuffix(regionId, teamIds)
+        def challengerLeagues():
+                self.path.append(path_parts['CHALLENGER'])
+                return self
 
-#def leagueEntriesByTeamSuffix(regionId, teamIds)
-
-def challengerTierLeagues(regionId):
-        return "/api/lol/"+regionId+"/v2.5/league/challenger"
-
-def masterTierLeagues(regionId):
-        return "/api/lol/"+regionId+"/v2.5/league/master"
+        def masterLeagues():
+                self.path.append(path_parts['MASTER'])
+                return self
 
 ####################
 #  match suffixes  #
 ####################
-def match(regionId, matchId, includeTimeline=False):
-        return "/api/lol/"+regionId+"/v2.2/match/"+str(matchId)+"?includeTimeline="+str(includeTimeline)+"&"        
 
-########################
-#  matchlist suffixes  #
-########################
-def matchList(regionId, summonerId, championIds=[], rankedQueues=[], seasons=[], beginTime=-1, endTime=-1, beginIndex=-1, endIndex=-1):
-        optionalParameters = []
-        if (len(championIds)>0):
-                optionalParameters.append("championIds="+','.join(map(str,championIds)))
-        if (len(rankedQueues)>0):
-                optionalParameters.append("rankedQueues="+','.join(rankedQueues))
-        if (len(seasons)>0):
-                optionalParameters.append("seasons="+','.join(seasons))
-        if (beginTime>0):
-                optionalParameters.append("&beginTime="+str(int(beginTime)))
-        if (endTime>0):
-                optionalParameters.append("endTime="+str(int(endTime)))
-        if (beginIndex>0):
-                optionalParameters.append("beginIndex="+str(beginIndex))
-        if (endIndex>0):
-                optionalParameters.append("endIndex="+str(endIndex))
-        s="/api/lol/"+regionId+"/v2.2/matchlist/by-summoner/"+str(summonerId)+"?"+('&'.join(optionalParameters))+'&'
-        return s
-
-#############################
-#  summoner stats suffixes  #
-#############################
-def rankedStats(regionId, summonerId, season=""):
-        seasonString = "" if season == "" else ("season="+season+"&")
-        return "/api/lol/"+regionId+"/v1.3/stats/by-summoner/"+str(summonerId)+"/ranked?"+seasonString
-        
-def playerStats(regionId, summonerId, season=""):
-        seasonString = "" if season == "" else ("season="+season+"&")
-        return "/api/lol/"+regionId+"/v1.3/stats/by-summoner/"+str(summonerId)+"/summary?"+seasonString
-
-#######################
-#  summoner suffixes  #
-#######################
-#def summonersByAccountIdsSuffix(regionId, accountIds):
-
-def summonersByNames(regionId, summonerNames):
-        summonerNamesList=','.join(summonerNames)
-        return "/api/lol/"+regionId+"/v1.4/summoner/by-name/"+summonerNamesList+"?"
-
-def summonersBySummonerIds(regionId, summonerIds):
-        summonerIdsList=','.join(map(str,summonerIds))
-        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"?"
-
-def masteryPagesBySummonerIds(regionId, summonerIds):
-        summonerIdsList=','.join(map(str,summonerIds))
-        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/masteries?"
-
-def summonerNamesBySummonerIds(regionId, summonerIds):
-        summonerIdsList=','.join(map(str,summonerIds))
-        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/name?"
-
-def runePagesBySummonerIds(regionId, summonerIds):
-        summonerIdsList=','.join(map(str,summonerIds))
-        return "/api/lol/"+regionId+"/v1.4/summoner/"+summonerIdsList+"/runes?"
-
-##########################
-#  static data suffixes  #
-##########################
-#def championsListSuffix(regionId, locale, version dataById, champData)
-
-#def championSuffix(regionId, championId, locale, version, champData)
-
-#def itemsListSuffix(regionId, locale, version, itemListData)
-
-#def itemSuffix(regionId, itemId, locale, version, itemData)
-
-#def languageStringsDataSuffix(regionId, locale, version)
-
-#def supportedLanguagesDataSuffix(regionId)
-
-#def mapDataSuffix(regionId, locale, version)
-
-#def masteryListSuffix(regionId, locale, version, masteryListData)
-
-#def masterySuffix(region, masteryId, locale, version, masteryData)
-
-#def realmSuffix(regionId)
-
-#def runesListSuffix(regionId, locale, version, runeListData)
-
-#def runeSuffix(regionId, runeId, locale, version, runeData)
-
-#def summonerSpellListSuffix(regionId, locale, version, spellListData)
-
-#def summonerSpellSuffix(regionId, spellId, locale, version, spellData)
-
-#def versionDataSuffix(regionId)
-
-
-###################
-#  team suffixes  #
-###################
-def teamsBySummonerIds(regionId, summonerIds):
-        summonerIdsList=','.join(map(str,summonerIds))
-        return "/api/lol/"+regionId+"/v2.4/team/by-summoner/"+summonerIdsList+"?"
-
-def teamsByTeamIds(regionId, teamIds):
-        teamIdsList=','.join(map(str,teamIds))
-        return "/api/lol/"+regionId+"/v2.4/team/"+teamIdsList+"?"
-
-##########################################
-#  get the request URL given the suffix  #
-##########################################
-#def getRequestURL(suffix):
-#	return (requestPrefix+suffix+requestGlue+get_api_key.getAPIKey())
-"""
+class matchReq(basicAPIReq):
+        def __init__(self):
+                basicAPIReq.__init__(self, 'MATCH')
+        def matches(regionId, matchId, includeTimeline=False):
+                self.path.append(regionId)
+                self.path.append(matchId)
+                self.params['INCLUDE_TIMELINE']=includeTimeline
+                return self
