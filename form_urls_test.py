@@ -35,9 +35,9 @@ def mainTest():
 
 
 def testOutput(reqObj):
-    print(".....RequestType: {type}.....", reqObj.requestType)
+    print(".....RequestType: {}.....".format(reqObj.requestType))
     reqObj.printReqURL()
-    print(testURL(reqObj.constructReqURL()))
+    print(testURL(reqObj.constructReqURL()), '\n')
 
 def testURL(URL):
     try:
