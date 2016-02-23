@@ -65,6 +65,7 @@ TODO/other notes:
     * list checking (length) for maximum number of objects that can be passed
     * patchable: versions in API call should be able to be updated with ease
     * tournament provider api requests
+    * move APIkey filepath and rate limiting constants to their own file
 
 
 structure notes

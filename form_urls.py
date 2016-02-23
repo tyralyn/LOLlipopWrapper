@@ -127,12 +127,12 @@ class baseReqURL:
         def pathString(self): 
                 return '/'.join(map(str,self.path))
 
-        #returns dictionary of values as joined for URL
+        #returns dictionary of values as joined for URL for URL construction
         def valueString(self):
                 l = [ str(param_parts[k])+"="+str(v) for k, v in self.params.items()]
                 return '&'.join(l)
 
-        #construct entire URL given path and values, for all requests
+        #construct entire URL given path and values, makes actual URL for requests
         def constructReqURL(self):
                 return domainName + self.pathString()+"?"+self.valueString()
 
@@ -145,8 +145,7 @@ class baseReqURL:
 
 #child of baseReqURL for requests of the type /api/lol (most commonly used)
 class basicAPIReq(baseReqURL):
-        #region ID: added here because non /api/lol requests do not utilize a region
-        regionId=region_ids[DEFAULT_REGION]
+        regionId=region_ids[DEFAULT_REGION] #region ID: added here rather than in base class because non /api/lol requests do not utilize a region
         requestType='BASIC' #not an actual request type that can be submitted, for printing purposes
         def __init__(self, requestType): 
                 baseReqURL.__init__(self)
@@ -179,7 +178,9 @@ class championReq(basicAPIReq):
 class recentGamesReq(basicAPIReq):
         def __init__(self):
                 basicAPIReq.__init__(self, 'RECENT_GAMES')
-        def recentGames(self):
+        def recentGames(self, summonerId):
+                self.path.append(path_parts['BY_SUMMONER'])
+                self.path.append(str(summonerId))
                 return self
 
 ######################
@@ -197,7 +198,6 @@ class leagueReq(basicAPIReq):
                 self.leaguesBySummoner(regionId, summonerIds)
                 self.path.append(path_parts['ENTRIES'])
                 return self
-
         #def leaguesByTeamSuffix(regionId, teamIds)
         #def leagueEntriesByTeamSuffix(regionId, teamIds)
         def challengerLeagues(self, leagueType='RANKED_5_SOLO'):
